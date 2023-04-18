@@ -11,7 +11,7 @@ justify-content: center;
 height: 100dvh;
 width: 100dvw;
 background: #FFD601;
-background: linear-gradient(135deg, #FFD601, #F928A0);;
+background: linear-gradient(135deg, #FFD601, #F928A0);
 }
 table {
     background: #D9D9D9;
@@ -22,8 +22,11 @@ table {
 .one {
     box-shadow: inset 4px 4px 16px 3px rgba(0, 0, 0, 0.25);
 }
-
-.start{
+.line{
+    display: flex;
+    gap: 1em;
+}
+.button-style{
 background: linear-gradient(90deg,#ffd601  0%,#F928A0 100%);
 padding: 10px 30px;
 border: none;
@@ -35,9 +38,9 @@ flex-direction: row;
 align-items: center;
 cursor: pointer;
 text-transform: uppercase;
-margin-top: 2%;
+margin-top: 8%;
 }
 
-.start:hover{
+.button-style:hover{
 padding: 10px 50px;
 }
