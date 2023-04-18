@@ -12,6 +12,13 @@
 <body>
     <main>
         <div class="container">
+                <h1>Niveau 
+                    <script>
+                        document.write(levels)
+                        // le niveau augmente à chaque win
+                    </script>
+                </h1>
+
             <table>
                 <tbody>
                     <!-- Boucle pour générer 5 lignes -->
@@ -32,7 +39,7 @@
                     </script>
                 </tbody>
             </table>
-            <button class="start" type="button">Play</button>
+            <div class="start" type="button" disabled>Play</div>
         </div>
     </main> 
 </body>
