@@ -38,9 +38,14 @@ flex-direction: row;
 align-items: center;
 cursor: pointer;
 text-transform: uppercase;
-margin-top: 8%;
+margin: 1em;
 }
 
 .button-style:hover{
 padding: 10px 50px;
+}
+
+h2{
+    margin: 0;
+    margin-bottom: 1em;
 }

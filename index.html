@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Challenge</title>
-
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
     <link href="./assets/css/style.css" rel="stylesheet">
     <script defer src="./assets/js/script.js"></script>
 </head>
@@ -13,29 +13,13 @@
     <main>
         <div id="container" class="container">
                 <h1>Bienvenue sur Color Challenge !</h1>
+                <h2>Levels <span id="score">3</span></h2>
             <table>
-                <tbody>
-                    <!-- Boucle pour générer 5 lignes -->
-                    <script>
-                        // h = ID cube
-                        h=0
-                        for (var i = 1; i < 6; i++) {
-                            document.write("<tr>");
-
-                        // Boucle pour générer 12 colonnes
-                        for (var j = 1; j < 13; j++) {
-                            // ID UNIQUE ADD
-                            document.write("<td id='" + (h+=1) + " ' class='one'></td> ")
-                        }
-
-                        document.write("</tr>");
-                        }
-                    </script>
+                <tbody id='tbody'>
                 </tbody>
             </table>
             <div class="line">
             <div class="button-style" id="start" type="button" disabled>Play</div>
-            <!-- <div class="button-style" id="verif" type="button" disabled>Verification</div> -->
             </div>
         </div>
     </main> 

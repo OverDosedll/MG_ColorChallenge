@@ -1,3 +1,22 @@
+
+// ---------------------------------------------------------
+const table = document.getElementById('tbody');
+
+let h = 0;
+// <!-- Boucle pour générer 5 lignes -->
+for (let i = 1; i < 6; i++) {
+    let row = table.insertRow();
+    // Boucle pour générer 12 colonnes
+    for (let j = 1; j < 13; j++) {
+        let cell = row.insertCell();
+        cell.setAttribute('id', (h += 1));
+        cell.setAttribute('class', 'one');
+    }
+}
+// ----------------------------------------------------------
+
+
+const score = document.getElementById('score');
 // ADD BUTTON 
 let isStarted = false;    
 
@@ -17,15 +36,11 @@ function blackOut(){
     document.querySelector('tbody').style.background = '#1e1e1e'
 }
 function LightOn(){
-    return new Promise((resolve, reject) => {
     setTimeout(() => {
     back.style.background = '';
     document.querySelector('tbody').removeAttribute('style');
-    }, i * 500)
-    resolve();
-})
+    }, 2000)
 }
-
 
 // Fonction pour éclairer un cube
 function lightCube(id) {
@@ -34,7 +49,7 @@ function lightCube(id) {
     audio.play();
     setTimeout(() => {
     cube.removeAttribute('style');
-    }, i * 500)}
+    }, 1500)}
 
 let randomIds = [];
 
@@ -51,7 +66,6 @@ async function getRandomIds(oneIds, CubesToLight) {
             const randomId = oneIds.splice(randomIndex, 1)[0];
             randomIds.push(randomId);
 
-            console.log(i)
             console.log('Random ID : '+randomId)
 
             setTimeout(() => {
@@ -86,7 +100,7 @@ let isUserChoosing = false;
                     // Enlève le style 200ms après le click
                     setTimeout(() => {
                         element.removeAttribute('style')
-                    }, i * 200)
+                    }, 700)
                     // ajoute l'id dans un nouveau tableau
                     clickedIds.push(id_click);
                 }
@@ -100,16 +114,14 @@ function user_choice(){
     isUserChoosing = true;
     LightOn();
         const intervalId = setInterval(() => {
-            console.log('Clique' + countIdUser + 'CubesToLight' + CubesToLight)
+            // console.log('Clique' + countIdUser + 'CubesToLight' + CubesToLight)
                 if (countIdUser === CubesToLight) {
                     clearInterval(intervalId);
-                    // resolve();
                     isUserChoosing = false;
                     verification();
                     return;
                 } else if (countIdUser > CubesToLight) {
                     alert('Vous avez cliqué trop de fois non ?');
-                    resolve();
                     isUserChoosing = false;
                     return;
                 }
@@ -124,12 +136,9 @@ function verification(){
             for (let i = 0; i < randomIds.length; i++) {
             if (clickedIds[i] === randomIds[i]) {
                 isCorrectOrder = true;
-                console.log('table cliqué =' + clickedIds[i] + 'table random =' + randomIds[i])
-                console.log(isCorrectOrder)
             }
             else if (clickedIds[i] !== randomIds[i]) {
                 isCorrectOrder = false;
-                console.log(isCorrectOrder)
                 break;
             }}
                 if (isCorrectOrder) {
@@ -140,6 +149,7 @@ function verification(){
                     countIdUser=0;
                     clickedIds = []; 
                     randomIds = [];
+                    score.textContent = CubesToLight;
                     return;
                     // --------------------------------------------------------------------------------------------------
                 } else {
@@ -150,36 +160,20 @@ function verification(){
                     countIdUser=0;
                     clickedIds = []; 
                     randomIds = [];
+                    score.textContent = CubesToLight;
                     return;
                     // --------------------------------------------------------------------------------------------------
                 }
         }}
-    // function play_game(){
-    //     // reset ----------------
-    //     // réinitialiser le tableau des ID cliqués
-    //     clickedIds = []; 
-    //     // ----------------------
-    //     blackOut()
-    //     getRandomIds(oneIds, CubesToLight)
-    //         .then(() => LightOn())
-    //         .then(() => user_choice())
-    //         .then(() => verification());
-    // return;
-    // }
-    
-// document.getElementById('verif').addEventListener('click', event => {
-//     isStarted = true;
-//     document.getElementById('verif').disabled = true;
-//     verification();
-// })
-
 
 
 // LANCEMENT DU JEU PAR LE BUTTON PLAY
 document.getElementById('start').addEventListener('click', event => {
+    if (CubesToLight <= 0){
+        alert('Voyons ? Tu n\'a pas réussi ? Alors test ça !');
+        CubesToLight = 1;
+    }
     isStarted = true;
     document.getElementById('start').disabled = true;
-    // play_game();
     getRandomIds(oneIds, CubesToLight);
-
 });
