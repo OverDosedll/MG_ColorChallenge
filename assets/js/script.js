@@ -36,7 +36,7 @@ function lightCube(id) {
     cube.removeAttribute('style');
     }, i * 500)}
 
-const randomIds = [];
+let randomIds = [];
 
 // DECLARATION DES LEVELS : --------------------------------------
 // let levels = 3;
@@ -120,20 +120,26 @@ function user_choice(){
 
 function verification(){
         if (clickedIds.length === randomIds.length) {
-            let isCorrectOrder = true;
+            let isCorrectOrder = false;
             for (let i = 0; i < randomIds.length; i++) {
-            if (clickedIds[i] !== randomIds[i]) {
+            if (clickedIds[i] === randomIds[i]) {
+                isCorrectOrder = true;
+                console.log('table cliqué =' + clickedIds[i] + 'table random =' + randomIds[i])
+                console.log(isCorrectOrder)
+            }
+            else if (clickedIds[i] !== randomIds[i]) {
                 isCorrectOrder = false;
+                console.log(isCorrectOrder)
                 break;
-            }
-            }
+            }}
                 if (isCorrectOrder) {
                     // Gestion des niveaux :
                     CubesToLight+=1;
                     // les ID sont dans le bon ordre, éteindre tous les cubes
                     alert('Gagné ! Vous passez levels : ' + CubesToLight);
                     countIdUser=0;
-                    // resolve();
+                    clickedIds = []; 
+                    randomIds = [];
                     return;
                     // --------------------------------------------------------------------------------------------------
                 } else {
@@ -142,7 +148,8 @@ function verification(){
                     // les ID ne sont pas dans le bon ordre, afficher un message d'erreur
                     alert('Perdu ! Vous redescendez levels : ' + CubesToLight);
                     countIdUser=0;
-                    // resolve();
+                    clickedIds = []; 
+                    randomIds = [];
                     return;
                     // --------------------------------------------------------------------------------------------------
                 }
