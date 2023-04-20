@@ -22,6 +22,7 @@ let isStarted = false;
 
 // ADD AUDIO 
 const audio = new Audio('./assets/song/bell_service.mp3');
+const music = document.getElementById('music')
 
 // Récupérer tous les éléments avec la classe 'one'
 const oneCubes = document.querySelectorAll('.one');
@@ -32,15 +33,23 @@ console.log(oneIds)
 const back = document.querySelector('.container')
 
 function blackOut(){
-    back.style.background = '#1e1e1e'
+    document.querySelector('body').style.color = '#ffffff';
+    back.style.backgroundColor = '#101010'
+    back.style.opacity = '0.9';
+    back.style.backgroundImage = 'repeating-radial-gradient( circle at 0 0, transparent 0, #101010 10px ), repeating-linear-gradient( #24242455, #242424 )'
     document.querySelector('tbody').style.background = '#1e1e1e'
 }
 function LightOn(){
     setTimeout(() => {
-    back.style.background = '';
+    document.querySelector('body').removeAttribute('style');
+    back.removeAttribute('style');
     document.querySelector('tbody').removeAttribute('style');
     }, 2000)
 }
+
+// background-color: #101010;
+// opacity: 0.9;
+// background-image:  repeating-radial-gradient( circle at 0 0, transparent 0, #101010 10px ), repeating-linear-gradient( #24242455, #242424 );
 
 // Fonction pour éclairer un cube
 function lightCube(id) {
@@ -166,13 +175,21 @@ function verification(){
                 }
         }}
 
+// varibale pour le lancement de l'audio
+let firstTimeClick = false;
 
 // LANCEMENT DU JEU PAR LE BUTTON PLAY
 document.getElementById('start').addEventListener('click', event => {
+    if (!firstTimeClick){
+        music.currentTime = 1.6;
+    }
+    music.play();
     if (CubesToLight <= 0){
         alert('Voyons ? Tu n\'a pas réussi ? Alors test ça !');
         CubesToLight = 1;
     }
+    firstTimeClick = true;
+
     isStarted = true;
     document.getElementById('start').disabled = true;
     getRandomIds(oneIds, CubesToLight);

@@ -1,7 +1,7 @@
 body {
     margin:0;
     font-family: Roboto, sans-serif;
-    color: #fff;
+    color: #303030;
 }
 .container {
 display: flex;
@@ -10,8 +10,11 @@ align-items: center;
 justify-content: center;
 height: 100dvh;
 width: 100dvw;
-background: #FFD601;
-background: linear-gradient(135deg, #FFD601, #F928A0);
+/* background: #FFD601;
+background: linear-gradient(135deg, #FFD601, #F928A0); */
+background-color: #fffffc;
+opacity: 0.9;
+background-image:  repeating-radial-gradient( circle at 0 0, transparent 0, #fffffc 10px ), repeating-linear-gradient( #c7b49a55, #c7b49a );
 }
 table {
     background: #D9D9D9;
@@ -27,9 +30,9 @@ table {
     gap: 1em;
 }
 .button-style{
-background: linear-gradient(90deg,#ffd601  0%,#F928A0 100%);
+/* background: linear-gradient(90deg,#ffd601  0%,#F928A0 100%); */
 padding: 10px 30px;
-border: none;
+border: solid 5px;
 box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
 border-radius: 50px;
 transition : 1300ms;
