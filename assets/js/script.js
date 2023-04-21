@@ -28,7 +28,7 @@ const music = document.getElementById('music')
 const oneCubes = document.querySelectorAll('.one');
 // récupérer dans un tableau tout les cubes id
 const oneIds = Array.from(oneCubes).map(cube => cube.id);
-console.log(oneIds)
+// console.log(oneIds)
 
 const back = document.querySelector('.container')
 
@@ -63,24 +63,35 @@ function lightCube(id) {
 let randomIds = [];
 
 // DECLARATION DES LEVELS : --------------------------------------
-// let levels = 3;
-let CubesToLight = 3;
+// let CubesToLight = 3;
+
+// LOCAL STORAGE - SAVE -------------------------------------
+
+let levels;
+if (localStorage.getItem("levels") !== null) {
+    levels = Number(localStorage.getItem("levels"));
+    score.textContent = levels;
+} else {
+    localStorage.setItem("levels", 3);
+    levels = Number(localStorage.getItem("levels"));
+    score.textContent = levels;
+}
+
+// ----------------------------------------------------------
 // ---------------------------------------------------------------
 
-async function getRandomIds(oneIds, CubesToLight) {
+async function getRandomIds(oneIds, levels) {
         blackOut();
         let counter = 0;
-        for (let i = 0; i < CubesToLight; i++) {
+        for (let i = 0; i < levels; i++) {
             const randomIndex = Math.floor(Math.random() * oneIds.length);
             const randomId = oneIds.splice(randomIndex, 1)[0];
             randomIds.push(randomId);
 
-            console.log('Random ID : '+randomId)
-
             setTimeout(() => {
             lightCube(randomId);
             counter++;
-            if (counter === CubesToLight) {
+            if (counter === levels) {
                 // resolve();
                 user_choice();
                 }
@@ -123,13 +134,12 @@ function user_choice(){
     isUserChoosing = true;
     LightOn();
         const intervalId = setInterval(() => {
-            // console.log('Clique' + countIdUser + 'CubesToLight' + CubesToLight)
-                if (countIdUser === CubesToLight) {
+                if (countIdUser === levels) {
                     clearInterval(intervalId);
                     isUserChoosing = false;
                     verification();
                     return;
-                } else if (countIdUser > CubesToLight) {
+                } else if (countIdUser > levels) {
                     alert('Vous avez cliqué trop de fois non ?');
                     isUserChoosing = false;
                     return;
@@ -152,24 +162,26 @@ function verification(){
             }}
                 if (isCorrectOrder) {
                     // Gestion des niveaux :
-                    CubesToLight+=1;
+                    levels+=1;
                     // les ID sont dans le bon ordre, éteindre tous les cubes
-                    alert('Gagné ! Vous passez levels : ' + CubesToLight);
+                    alert('Gagné ! Vous passez levels : ' + levels);
                     countIdUser=0;
                     clickedIds = []; 
                     randomIds = [];
-                    score.textContent = CubesToLight;
+                    score.textContent = levels;
+                    localStorage.setItem("levels", levels);
                     return;
                     // --------------------------------------------------------------------------------------------------
                 } else {
                     // Gestion des niveaux :
-                    CubesToLight-=1;
+                    levels-=1;
                     // les ID ne sont pas dans le bon ordre, afficher un message d'erreur
-                    alert('Perdu ! Vous redescendez levels : ' + CubesToLight);
+                    alert('Perdu ! Vous redescendez levels : ' + levels);
                     countIdUser=0;
                     clickedIds = []; 
                     randomIds = [];
-                    score.textContent = CubesToLight;
+                    score.textContent = levels;
+                    localStorage.setItem("levels", levels);
                     return;
                     // --------------------------------------------------------------------------------------------------
                 }
@@ -184,13 +196,13 @@ document.getElementById('start').addEventListener('click', event => {
         music.currentTime = 1.6;
     }
     music.play();
-    if (CubesToLight <= 0){
+    if (levels <= 0){
         alert('Voyons ? Tu n\'a pas réussi ? Alors test ça !');
-        CubesToLight = 1;
+        levels = 1;
     }
     firstTimeClick = true;
 
     isStarted = true;
     document.getElementById('start').disabled = true;
-    getRandomIds(oneIds, CubesToLight);
+    getRandomIds(oneIds, levels);
 });
