@@ -2,17 +2,49 @@
 // ---------------------------------------------------------
 const table = document.getElementById('tbody');
 
-let h = 0;
+let h;
+let randomIds = [];
+let lines;
+let columns;
+
+// création d'un tableau pour récupérer les id cliqué
+let clickedIds = [];
+let countIdUser = 0;
+let isUserChoosing = false;
+
+let oneCubes;
+let oneIds;
+
+if (localStorage.getItem("lines") && localStorage.getItem("columns") !== null) {
+    lines = Number(localStorage.getItem("lines"));
+    columns = Number(localStorage.getItem("columns"));
+} else {
+    // 4 CAR i & j commence à 1
+    localStorage.setItem("lines", 3);
+    localStorage.setItem("columns", 3);
+    lines = Number(localStorage.getItem("lines"));
+    columns = Number(localStorage.getItem("columns"));
+}
+
 // <!-- Boucle pour générer 5 lignes -->
-for (let i = 1; i < 6; i++) {
+function tableCase() {
+// Supprime toutes les lignes de la table et les ID
+h=0;
+table.innerHTML = '';
+for (let i = 1; i < lines; i++) {
     let row = table.insertRow();
     // Boucle pour générer 12 colonnes
-    for (let j = 1; j < 13; j++) {
+    for (let j = 1; j < columns; j++) {
         let cell = row.insertCell();
         cell.setAttribute('id', (h += 1));
         cell.setAttribute('class', 'one');
     }
-}
+// Récupérer tous les éléments avec la classe 'one'
+oneCubes = document.querySelectorAll('.one');
+// récupérer dans un tableau tout les cubes id
+oneIds = Array.from(oneCubes).map(cube => cube.id);
+}}
+tableCase();
 // ----------------------------------------------------------
 
 
@@ -24,12 +56,6 @@ let isStarted = false;
 const audio = new Audio('./assets/song/bell_service.mp3');
 const music = document.getElementById('music')
 
-// Récupérer tous les éléments avec la classe 'one'
-const oneCubes = document.querySelectorAll('.one');
-// récupérer dans un tableau tout les cubes id
-const oneIds = Array.from(oneCubes).map(cube => cube.id);
-// console.log(oneIds)
-
 const back = document.querySelector('.container')
 
 function blackOut(){
@@ -39,6 +65,7 @@ function blackOut(){
     back.style.backgroundImage = 'repeating-radial-gradient( circle at 0 0, transparent 0, #101010 10px ), repeating-linear-gradient( #24242455, #242424 )'
     document.querySelector('tbody').style.background = '#1e1e1e'
 }
+
 function LightOn(){
     setTimeout(() => {
     document.querySelector('body').removeAttribute('style');
@@ -46,10 +73,6 @@ function LightOn(){
     document.querySelector('tbody').removeAttribute('style');
     }, 2000)
 }
-
-// background-color: #101010;
-// opacity: 0.9;
-// background-image:  repeating-radial-gradient( circle at 0 0, transparent 0, #101010 10px ), repeating-linear-gradient( #24242455, #242424 );
 
 // Fonction pour éclairer un cube
 function lightCube(id) {
@@ -59,8 +82,6 @@ function lightCube(id) {
     setTimeout(() => {
     cube.removeAttribute('style');
     }, 1500)}
-
-let randomIds = [];
 
 // DECLARATION DES LEVELS : --------------------------------------
 // let CubesToLight = 3;
@@ -98,19 +119,14 @@ async function getRandomIds(oneIds, levels) {
         }, i * 2500)}
     };
 
-// création d'un tableau pour récupérer les id cliqué
-let clickedIds = [];
-let countIdUser = 0;
-let isUserChoosing = false;
-
-
+    function forEach(){
     // Ajouter un écouteur d'événements à chaque élément de la liste
+    oneCubes = document.querySelectorAll('.one');
         oneCubes.forEach(oneCube => {
             oneCube.addEventListener('click', event => {
                 if (isUserChoosing) {
                     countIdUser += 1;
                     const id_click = event.target.id;
-                    console.log(id_click);
                     // -------------------------
                     // PLAY WITH ID :
                     // -------------------------
@@ -125,17 +141,22 @@ let isUserChoosing = false;
                     clickedIds.push(id_click);
                 }
         });
-    });
+    });}
 
-
-
+    function removeClickListeners() {
+        oneCubes.forEach(oneCube => {
+        const clonedCube = oneCube.cloneNode(true);
+        oneCube.parentNode.replaceChild(clonedCube, oneCube);
+        });
+    }
 
 function user_choice(){
     isUserChoosing = true;
+    forEach();
     LightOn();
-        const intervalId = setInterval(() => {
+        setInterval(() => {
                 if (countIdUser === levels) {
-                    clearInterval(intervalId);
+                    clearInterval();
                     isUserChoosing = false;
                     verification();
                     return;
@@ -160,28 +181,49 @@ function verification(){
                 isCorrectOrder = false;
                 break;
             }}
+            // --------------------------------------------------------------------------------------------------
                 if (isCorrectOrder) {
+                    // les ID sont dans le bon ordre
                     // Gestion des niveaux :
                     levels+=1;
-                    // les ID sont dans le bon ordre, éteindre tous les cubes
+
+                    if (levels >= 10) {
+                        lines +=1;
+                        columns += 1;
+                        localStorage.setItem("lines", lines);
+                        localStorage.setItem("columns", columns);
+                        levels = 1;
+
+                        tableCase();
+                    }
+
+                    localStorage.setItem("levels", levels);
                     alert('Gagné ! Vous passez levels : ' + levels);
+                    score.textContent = levels;
                     countIdUser=0;
                     clickedIds = []; 
                     randomIds = [];
-                    score.textContent = levels;
-                    localStorage.setItem("levels", levels);
                     return;
-                    // --------------------------------------------------------------------------------------------------
+
                 } else {
+                    // les ID ne sont pas dans le bon ordre
                     // Gestion des niveaux :
                     levels-=1;
-                    // les ID ne sont pas dans le bon ordre, afficher un message d'erreur
+                    if (levels <= 0) {
+                        lines -=1;
+                        columns -= 1;
+                        localStorage.setItem("lines", lines);
+                        localStorage.setItem("columns", columns);
+                        levels = 1;
+
+                        tableCase();
+                    }
+                    localStorage.setItem("levels", levels);
                     alert('Perdu ! Vous redescendez levels : ' + levels);
+                    score.textContent = levels;
                     countIdUser=0;
                     clickedIds = []; 
                     randomIds = [];
-                    score.textContent = levels;
-                    localStorage.setItem("levels", levels);
                     return;
                     // --------------------------------------------------------------------------------------------------
                 }
@@ -205,4 +247,5 @@ document.getElementById('start').addEventListener('click', event => {
     isStarted = true;
     document.getElementById('start').disabled = true;
     getRandomIds(oneIds, levels);
+    removeClickListeners();
 });
