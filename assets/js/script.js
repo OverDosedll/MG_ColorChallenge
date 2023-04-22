@@ -1,6 +1,6 @@
 
 // ---------------------------------------------------------
-const table = document.getElementById('tbody');
+const table = document.getElementById('tbody')
 
 let h;
 let randomIds = [];
@@ -14,14 +14,15 @@ let isUserChoosing = false;
 
 let oneCubes;
 let oneIds;
+let cube;
 
 if (localStorage.getItem("lines") && localStorage.getItem("columns") !== null) {
     lines = Number(localStorage.getItem("lines"));
     columns = Number(localStorage.getItem("columns"));
 } else {
     // 4 CAR i & j commence à 1
-    localStorage.setItem("lines", 3);
-    localStorage.setItem("columns", 3);
+    localStorage.setItem("lines", 4);
+    localStorage.setItem("columns", 4);
     lines = Number(localStorage.getItem("lines"));
     columns = Number(localStorage.getItem("columns"));
 }
@@ -76,7 +77,7 @@ function LightOn(){
 
 // Fonction pour éclairer un cube
 function lightCube(id) {
-    const cube = document.getElementById(id);
+    cube = document.getElementById(id);
     cube.style.background = "#38ff3e";
     audio.play();
     setTimeout(() => {
@@ -93,7 +94,7 @@ if (localStorage.getItem("levels") !== null) {
     levels = Number(localStorage.getItem("levels"));
     score.textContent = levels;
 } else {
-    localStorage.setItem("levels", 3);
+    localStorage.setItem("levels", 1);
     levels = Number(localStorage.getItem("levels"));
     score.textContent = levels;
 }
@@ -108,12 +109,13 @@ async function getRandomIds(oneIds, levels) {
             const randomIndex = Math.floor(Math.random() * oneIds.length);
             const randomId = oneIds.splice(randomIndex, 1)[0];
             randomIds.push(randomId);
-
-            setTimeout(() => {
-            lightCube(randomId);
+            // actualisation
+            // oneCubes = document.querySelectorAll('.one');
+        setTimeout(() => {
+            lightCube(randomIds[i]);
+            console.log(randomIds[i]);
             counter++;
             if (counter === levels) {
-                // resolve();
                 user_choice();
                 }
         }, i * 2500)}
@@ -143,7 +145,7 @@ async function getRandomIds(oneIds, levels) {
         });
     });}
 
-    function removeClickListeners() {
+    function removeEventListeners() {
         oneCubes.forEach(oneCube => {
         const clonedCube = oneCube.cloneNode(true);
         oneCube.parentNode.replaceChild(clonedCube, oneCube);
@@ -154,9 +156,9 @@ function user_choice(){
     isUserChoosing = true;
     forEach();
     LightOn();
-        setInterval(() => {
+        Interval = setInterval(() => {
                 if (countIdUser === levels) {
-                    clearInterval();
+                    clearInterval(Interval);
                     isUserChoosing = false;
                     verification();
                     return;
@@ -187,7 +189,7 @@ function verification(){
                     // Gestion des niveaux :
                     levels+=1;
 
-                    if (levels >= 10) {
+                    if (levels >= 8) {
                         lines +=1;
                         columns += 1;
                         localStorage.setItem("lines", lines);
@@ -203,6 +205,7 @@ function verification(){
                     countIdUser=0;
                     clickedIds = []; 
                     randomIds = [];
+
                     return;
 
                 } else {
@@ -247,5 +250,5 @@ document.getElementById('start').addEventListener('click', event => {
     isStarted = true;
     document.getElementById('start').disabled = true;
     getRandomIds(oneIds, levels);
-    removeClickListeners();
+    removeEventListeners();
 });
