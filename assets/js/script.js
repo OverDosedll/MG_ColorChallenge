@@ -101,19 +101,23 @@ if (localStorage.getItem("levels") !== null) {
 
 // ----------------------------------------------------------
 // ---------------------------------------------------------------
-
+let randomId;
 async function getRandomIds(oneIds, levels) {
         blackOut();
         let counter = 0;
         for (let i = 0; i < levels; i++) {
             const randomIndex = Math.floor(Math.random() * oneIds.length);
-            const randomId = oneIds.splice(randomIndex, 1)[0];
+            // Permet de prendre qu'une seule fois l'ID et non pas plusieurs -
+            // randomId = oneIds.splice(randomIndex, 1)[0];
+            // ---------------------------------------------------------------
+            // Permet de pouvoir prendre plusieurs fois le meme ID -----------
+            randomId = oneIds[randomIndex];
+            // ---------------------------------------------------------------
             randomIds.push(randomId);
-            // actualisation
-            // oneCubes = document.querySelectorAll('.one');
+            // Afin d'avoir les réponses dans la console
+            console.log(randomId);
         setTimeout(() => {
             lightCube(randomIds[i]);
-            console.log(randomIds[i]);
             counter++;
             if (counter === levels) {
                 user_choice();
@@ -141,6 +145,7 @@ async function getRandomIds(oneIds, levels) {
                     }, 700)
                     // ajoute l'id dans un nouveau tableau
                     clickedIds.push(id_click);
+                    console.log(clickedIds);
                 }
         });
     });}
@@ -168,7 +173,6 @@ function user_choice(){
                     return;
                 }
         }, 800);
-            
 };
 
 
@@ -188,7 +192,6 @@ function verification(){
                     // les ID sont dans le bon ordre
                     // Gestion des niveaux :
                     levels+=1;
-
                     if (levels >= 8) {
                         lines +=1;
                         columns += 1;
@@ -198,14 +201,13 @@ function verification(){
 
                         tableCase();
                     }
-
                     localStorage.setItem("levels", levels);
                     alert('Gagné ! Vous passez levels : ' + levels);
                     score.textContent = levels;
                     countIdUser=0;
                     clickedIds = []; 
                     randomIds = [];
-
+                    randomId = '';
                     return;
 
                 } else {
@@ -227,6 +229,7 @@ function verification(){
                     countIdUser=0;
                     clickedIds = []; 
                     randomIds = [];
+                    randomId = '';
                     return;
                     // --------------------------------------------------------------------------------------------------
                 }
